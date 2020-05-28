@@ -1,8 +1,10 @@
 package com.example.todolist.appcontroller;
 
+import java.util.ArrayList;
+
 public interface IStorable<T> {
-    public T[] GetAllObjects();
-    public bool RemoveObject(T object);
-    public bool AddOrUpdateObject(T object);
+    public ArrayList<T> GetAllObjects();
+    public boolean RemoveObject(T object);
+    public boolean AddOrUpdateObject(T object);
 }
 
