@@ -10,19 +10,19 @@ public class MainView {
 
     private Button addTaskButton;
 
-    public MainView(Activity actvity , IMainViewActions mainViewActions){
+    public MainView(Activity activity , IMainViewActions mainViewActions){
         this.mainViewActions = mainViewActions;
 
-        addTaskButton = actvity.findViewById(R.id.addTaskButton);
-        addTaskButton.setOnClickListener(OnAddTaskButtonClick());
-    }
-
-    private View.OnClickListener OnAddTaskButtonClick(){
-        return  new View.OnClickListener() {
+        addTaskButton = activity.findViewById(R.id.addTaskButton);
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainViewActions.AddTask();
+                OnAddTaskButtonClick();
             }
-        };
+        });
+    }
+
+    private void OnAddTaskButtonClick(){
+        mainViewActions.ShowAddTaskView();
     }
 }

@@ -1,26 +1,27 @@
 package com.example.todolist.appcontroller;
 
-import java.util.HashSet;
+import java.util.Vector;
 
 public class Controller<T> implements IAddable<T>{
     protected IStorable<T> storable;
-    protected HashSet<IView<T>> taskViews;
+    protected Vector<IView<T>> views;
 
     public Controller(IStorable<T> storable){
-        taskViews = new HashSet<>();
+        views = new Vector<>();
         this.storable = storable;
     }
 
     public void AddView(IView<T> view){
-        taskViews.add(view);
+        views.add(view);
     }
 
     public void RemoveView(IView<T> view){
-        taskViews.remove(view);
+        views.remove(view);
     }
 
     @Override
-    public void AddObject(T object) {
-
+    public void AddObject(final T object) {
+        storable.AddOrUpdateObject(object);
+        views.forEach((view)-> view.ViewShow(object));
     }
 }

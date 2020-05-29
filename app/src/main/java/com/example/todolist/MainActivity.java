@@ -12,8 +12,9 @@ import com.example.todolist.appcontroller.Controller;
 import com.example.todolist.appcontroller.IAddable;
 import com.example.todolist.sqldb.SQLDatabase;
 
-public class MainActivity extends AppCompatActivity implements IMainViewActions{
+public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final String DATABASE_NAME = "todolist.db";
+    private static final int ADD_TASK_ACTIVITY_REQUEST_CODE = 0;
 
     private SQLDatabase<Task> taskSQLDatabase;
     private Controller<Task> controller;
@@ -32,9 +33,27 @@ public class MainActivity extends AppCompatActivity implements IMainViewActions{
     }
 
     @Override
-    public void AddTask() {
+    public void ShowAddTaskView() {
         Intent intent = new Intent(this, AddTaskActivity.class);
-        intent.putExtras("taskAddable", controller);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode)
+        {
+            case ADD_TASK_ACTIVITY_REQUEST_CODE:{
+                if(requestCode == RESULT_OK){
+                    TryAddTask(data);
+                }
+            }break;
+        }
+    }
+
+    private void TryAddTask(Intent data){
+        Task task = (Task) data.getSerializableExtra(INTENT_TASK);
+        controller.AddObject(task);
     }
 }
