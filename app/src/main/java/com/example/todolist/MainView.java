@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
 
-public class MainView {
+import com.example.todolist.appcontroller.IView;
+
+public class MainView implements IView<Task> {
     private IMainViewActions mainViewActions;
 
     private Button addTaskButton;
@@ -24,5 +26,15 @@ public class MainView {
 
     private void OnAddTaskButtonClick(){
         mainViewActions.ShowAddTaskView();
+    }
+
+    @Override
+    public void ViewClearAll() {
+
+    }
+
+    @Override
+    public void ViewShow(Task object) {
+
     }
 }

@@ -1,15 +1,8 @@
 package com.example.todolist;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
 import com.example.todolist.appcontroller.Controller;
-import com.example.todolist.appcontroller.IAddable;
 import com.example.todolist.sqldb.SQLDatabase;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
@@ -30,6 +23,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         controller = new Controller<>(taskSQLDatabase);
 
         mainView = new MainView(this,  this);
+        controller.AddView(mainView);
     }
 
     @Override
