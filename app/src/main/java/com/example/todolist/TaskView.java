@@ -44,9 +44,7 @@ public class TaskView extends LinearLayout {
 
         String[] statusArray = getResources().getStringArray(R.array.status_array);
 
-        if(task.priority >= 0 && task.priority < statusArray.length)
-            status.setText(statusArray[task.priority]);
+        if(task.status >= 0 && task.status < statusArray.length)
+            status.setText(statusArray[task.status]);
     }
-
-
 }
