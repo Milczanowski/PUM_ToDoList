@@ -21,7 +21,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, new TaskSQLHelper());
+        taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, new TaskSQLHelper(), 2);
         controller = new Controller<>(taskSQLDatabase);
 
         mainView = new MainView(this, getApplicationContext(), this);

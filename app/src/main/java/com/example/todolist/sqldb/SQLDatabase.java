@@ -12,13 +12,12 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implements IStorable<T> {
-
     public static final String COLUMN_ID = "id";
 
     private ISQLHelper<T> sqlHelper;
 
-    public SQLDatabase(Context context, String databaseName, ISQLHelper<T> sqlHelper) {
-        super(context, databaseName , null, 1);
+    public SQLDatabase(Context context, String databaseName, ISQLHelper<T> sqlHelper, int version) {
+        super(context, databaseName , null, version);
         this.sqlHelper = sqlHelper;
     }
 

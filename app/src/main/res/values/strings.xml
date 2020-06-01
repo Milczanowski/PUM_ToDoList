@@ -3,4 +3,19 @@
     <string name="add_task_button">Add Task</string>
     <string name="name_label">Name</string>
     <string name="description_label">Description</string>
+    <string name="status_label">Status</string>
+    <string name="priority_label">Priority</string>
+
+    <string-array name="status_array">
+        <item>To do</item>
+        <item>In progress</item>
+        <item>Done</item>
+        <item>Blocked</item>
+        <item>Rejected</item>
+    </string-array>
+    <string-array name="priority_array">
+        <item>Low</item>
+        <item>Normal</item>
+        <item>High</item>
+    </string-array>
 </resources>

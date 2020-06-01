@@ -1,7 +1,5 @@
 package com.example.todolist;
 
-import android.util.Log;
-
 import com.example.todolist.sqldb.ISQLObject;
 
 import java.io.Serializable;
@@ -11,7 +9,7 @@ public class Task implements ISQLObject, Serializable {
     private long id;
     public String name, description;
     public int status, priority;
-    public Date createDate, closeDate;
+    public Date createDate, closeDate, finishDate;
 
     public Task(){
         id= -1;
