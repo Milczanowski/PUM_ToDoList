@@ -2,12 +2,14 @@ package com.example.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
 import com.example.todolist.appcontroller.Controller;
 import com.example.todolist.sqldb.SQLDatabase;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final String DATABASE_NAME = "todolist.db";
-    private static final int ADD_TASK_ACTIVITY_REQUEST_CODE = 0;
+    private static final int ADD_TASK_ACTIVITY_REQUEST_CODE = 1;
 
     private SQLDatabase<Task> taskSQLDatabase;
     private Controller<Task> controller;
@@ -22,14 +24,15 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, new TaskSQLHelper());
         controller = new Controller<>(taskSQLDatabase);
 
-        mainView = new MainView(this,  this);
+        mainView = new MainView(this, getApplicationContext(), this);
         controller.AddView(mainView);
+        controller.RefreshView();
     }
 
     @Override
     public void ShowAddTaskView() {
         Intent intent = new Intent(this, AddTaskActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_TASK_ACTIVITY_REQUEST_CODE);
     }
 
     @Override
@@ -39,7 +42,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         switch (requestCode)
         {
             case ADD_TASK_ACTIVITY_REQUEST_CODE:{
-                if(requestCode == RESULT_OK){
+                if(resultCode == RESULT_OK){
                     TryAddTask(data);
                 }
             }break;

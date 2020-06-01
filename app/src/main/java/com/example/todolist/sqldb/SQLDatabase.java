@@ -35,8 +35,10 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(String.format("DROP TABLE IF EXISTS %s", sqlHelper.GetTableName()));
-        onCreate(sqLiteDatabase);
+        if(i != i1) {
+            sqLiteDatabase.execSQL(String.format("DROP TABLE IF EXISTS %s", sqlHelper.GetTableName()));
+            onCreate(sqLiteDatabase);
+        }
     }
 
     @Override
@@ -47,11 +49,12 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         Cursor cursor =  db.rawQuery( String.format("SELECT * from %s", sqlHelper.GetTableName()), null );
         cursor.moveToFirst();
 
-        while(cursor.isAfterLast() == false) {
+        while(!cursor.isAfterLast()) {
             T obj = sqlHelper.GetObject(cursor);
             obj.SetID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
 
             allObjects.add(obj);
+            cursor.moveToNext();
         }
 
         return allObjects;

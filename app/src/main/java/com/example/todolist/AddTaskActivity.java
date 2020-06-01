@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.util.Calendar;
+
 public class AddTaskActivity extends BaseActivity {
 
     EditText nameEditText, descriptionEditText;
@@ -31,7 +33,9 @@ public class AddTaskActivity extends BaseActivity {
     private void AddTask(){
         Task task = new Task();
         task.name = nameEditText.getText().toString();
-        task.description = nameEditText.getText().toString();
+        task.description = descriptionEditText.getText().toString();
+        task.createDate = Calendar.getInstance().getTime();
+        task.closeDate = Calendar.getInstance().getTime();
 
         Intent intent = new Intent();
         intent.putExtra(INTENT_TASK, task);

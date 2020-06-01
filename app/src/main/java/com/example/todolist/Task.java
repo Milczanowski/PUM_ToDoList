@@ -1,5 +1,7 @@
 package com.example.todolist;
 
+import android.util.Log;
+
 import com.example.todolist.sqldb.ISQLObject;
 
 import java.io.Serializable;
