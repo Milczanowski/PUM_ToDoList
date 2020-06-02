@@ -43,7 +43,6 @@ public class EditTaskView extends LinearLayout {
 
         calendar = Calendar.getInstance();
 
-
         SetNameEdit();
         SetDescriptionEdit();
         SetStatusSpinner();
@@ -53,6 +52,7 @@ public class EditTaskView extends LinearLayout {
 
     private void SetNameEdit(){
         nameEditText = findViewById(R.id.nameEditText);
+        nameEditText.setText(task.name);
 
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -74,6 +74,7 @@ public class EditTaskView extends LinearLayout {
 
     private void SetDescriptionEdit(){
         descriptionEditText = findViewById(R.id.descriptionEditText);
+        descriptionEditText.setText(task.description);
 
         descriptionEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -96,6 +97,8 @@ public class EditTaskView extends LinearLayout {
         statusSpinner.setAdapter(new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.status_array)));
 
+        statusSpinner.setSelection(task.status);
+
         statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -112,6 +115,8 @@ public class EditTaskView extends LinearLayout {
 
         prioritySpinner.setAdapter(new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item,
                 getResources().getStringArray(R.array.priority_array)));
+
+        prioritySpinner.setSelection(task.priority);
 
         prioritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -131,9 +136,13 @@ public class EditTaskView extends LinearLayout {
         dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         timeFormat = new SimpleDateFormat("HH:mm");
 
+        if(task.finishDate!=null)
+            calendar.setTime(task.finishDate);
+        else
+            task.finishDate = calendar.getTime();
+
         dateTextView.setText(dateFormat.format(calendar.getTime()));
         timeTextView.setText(timeFormat.format(calendar.getTime()));
-        task.finishDate = calendar.getTime();
 
         dateLinearLayout = findViewById(R.id.dateLinearLayout);
 

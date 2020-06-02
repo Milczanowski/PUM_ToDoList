@@ -52,19 +52,24 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
         task.status = cursor.getInt(cursor.getColumnIndex(COLUMN_STATUS));
         task.priority = cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY));
 
-        int columnIndex = cursor.getColumnIndex(COLUMN_CREATE_DATE);
-        if(columnIndex>=0)
-            task.createDate = new Date(cursor.getLong(columnIndex));
-
-        columnIndex = cursor.getColumnIndex(COLUMN_CLOSE_DATE);
-        if(columnIndex>=0)
-            task.closeDate = new Date(cursor.getLong(columnIndex));
-
-        columnIndex = cursor.getColumnIndex(COLUMN_FINISH_DATE);
-        if(columnIndex>=0)
-            task.finishDate = new Date(cursor.getLong(columnIndex));
+        task.createDate = GetDateValue(cursor, COLUMN_CREATE_DATE);
+        task.closeDate = GetDateValue(cursor, COLUMN_CLOSE_DATE);
+        task.finishDate = GetDateValue(cursor, COLUMN_FINISH_DATE);
 
         return task;
+    }
+
+    private Date GetDateValue(Cursor cursor, String column){
+        int columnIndex = cursor.getColumnIndex(column);
+
+        if(columnIndex>=0)
+        {
+            Long dateValue = cursor.getLong(columnIndex);
+
+            if(dateValue>0)
+                return new Date(dateValue);
+        }
+        return null;
     }
 
     @Override

@@ -13,6 +13,9 @@ public class Task implements ISQLObject, Serializable {
 
     public Task(){
         id= -1;
+        createDate = null;
+        closeDate = null;
+        finishDate = null;
     }
 
     @Override

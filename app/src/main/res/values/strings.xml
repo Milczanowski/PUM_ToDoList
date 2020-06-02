@@ -7,6 +7,14 @@
     <string name="priority_label">Priority</string>
     <string name="finish_date_label">Finish date</string>
     <string name="finish_time_label">Finish time</string>
+    <string name="create_time_label">Create date</string>
+    <string name="close_time_label">Close date</string>
+    <string name="delete_task_button">Delete task</string>
+    <string name="save_task_button">Save changes</string>
+    <string name="yes_button">Yes</string>
+    <string name="no_button">No</string>
+    <string name="delete_dialog">Delete task</string>
+    <string name="delete_dialog_message">Are you sure you want to delete the task?</string>
 
     <string-array name="status_array">
         <item>To do</item>

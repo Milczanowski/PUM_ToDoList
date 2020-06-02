@@ -7,23 +7,30 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 
-public class TaskView extends LinearLayout {
+public class SmallTaskView extends LinearLayout {
     private TextView name, date, description, priority, status;
+    private SimpleDateFormat dateFormat;
 
-    public TaskView(Context context, Task task){
+    private String[] priorityArray, statusArray;
+
+    public SmallTaskView(Context context, Task task){
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-        layoutInflater.inflate(R.layout.task_layout, this);
+        layoutInflater.inflate(R.layout.small_task_layout, this);
 
         name = findViewById(R.id.nameTextView);
         date = findViewById(R.id.dateTextView);
         description = findViewById(R.id.descriptionTextView);
 
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        SetTask(task);
+    }
+
+    public void SetTask(Task task){
         SetPriority(task);
         SetStatus(task);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         name.setText(task.name);
         description.setText(task.description);
@@ -31,18 +38,20 @@ public class TaskView extends LinearLayout {
     }
 
     private void SetPriority(Task task){
-        priority = findViewById(R.id.priorityView);
-
-        String[] priorityArray = getResources().getStringArray(R.array.priority_array);
+        if(priority == null) {
+            priority = findViewById(R.id.priorityView);
+            priorityArray = getResources().getStringArray(R.array.priority_array);
+        }
 
         if(task.priority >= 0 && task.priority < priorityArray.length)
             priority.setText(priorityArray[task.priority]);
     }
 
     private void SetStatus(Task task){
-        status = findViewById(R.id.statusView);
-
-        String[] statusArray = getResources().getStringArray(R.array.status_array);
+        if(status == null) {
+            status = findViewById(R.id.statusView);
+            statusArray = getResources().getStringArray(R.array.status_array);
+        }
 
         if(task.status >= 0 && task.status < statusArray.length)
             status.setText(statusArray[task.status]);

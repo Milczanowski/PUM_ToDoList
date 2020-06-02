@@ -1,11 +1,9 @@
 package com.example.todolist.appcontroller;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Vector;
 
-public class Controller<T> implements IAddable<T>{
+public class Controller<T> implements IAddable<T>, IRemoveable<T>, IUpdateable<T>{
     protected IStorable<T> storable;
     protected Vector<IView<T>> views;
 
@@ -21,7 +19,7 @@ public class Controller<T> implements IAddable<T>{
         ArrayList<T> allObjects = storable.GetAllObjects();
 
         for(int i = 0; i < allObjects.size(); ++i)
-            ShowObject(allObjects.get(i));
+            ViewShowObject(allObjects.get(i));
     }
 
     public void AddView(IView<T> view){
@@ -33,16 +31,38 @@ public class Controller<T> implements IAddable<T>{
     }
 
     @Override
-    public void AddObject(final T object) {
+    public void AddObject(T object) {
         storable.AddOrUpdateObject(object);
 
-        ShowObject(object);
+        ViewShowObject(object);
     }
 
-    private void ShowObject(T object){
+    private void ViewShowObject(T object){
         for(int i = 0; i < views.size();++i)
             views.get(i).ViewShow(object);
     }
 
+    @Override
+    public void RemoveObject(T object) {
+        storable.RemoveObject(object);
 
+        ViewRemoveObject(object);
+    }
+
+    private void ViewRemoveObject(T object){
+        for(int i = 0; i < views.size();++i)
+            views.get(i).ViewRemove(object);
+    }
+
+    @Override
+    public void UpdateObject(T object) {
+        storable.AddOrUpdateObject(object);
+
+        ViewUpdateObject(object);
+    }
+
+    private void ViewUpdateObject(T object){
+        for(int i = 0; i < views.size();++i)
+            views.get(i).ViewUpdate(object);
+    }
 }
