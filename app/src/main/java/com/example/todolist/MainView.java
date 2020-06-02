@@ -4,8 +4,11 @@ package com.example.todolist;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.example.todolist.appcontroller.IView;
 
@@ -16,17 +19,22 @@ public class MainView implements IView<Task> {
     private IMainViewActions mainViewActions;
     private LinearLayout tasksLayout;
     private Button addTaskButton;
+    private Spinner sortSpinner;
+    private Activity activity;
 
     HashMap<Long, SmallTaskView> viewMap;
 
     public MainView(Activity activity, Context context, IMainViewActions mainViewActions){
         this.mainViewActions = mainViewActions;
         this.context = context;
+        this.activity = activity;
 
         viewMap = new HashMap<>();
 
         tasksLayout = activity.findViewById(R.id.tasksLayout);
         addTaskButton = activity.findViewById(R.id.addTaskButton);
+        SetSortSpinner();
+
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,6 +45,24 @@ public class MainView implements IView<Task> {
 
     private void OnAddTaskButtonClick(){
         mainViewActions.ShowAddTaskView();
+    }
+
+    private void SetSortSpinner(){
+        sortSpinner = activity.findViewById(R.id.sortSpinner);
+        sortSpinner.setAdapter(new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item,
+                activity.getResources().getStringArray(R.array.sorting_array)));
+
+        sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
