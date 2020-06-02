@@ -27,7 +27,7 @@ public class TaskView extends LinearLayout {
 
         name.setText(task.name);
         description.setText(task.description);
-        date.setText(dateFormat.format(task.closeDate));
+        date.setText(dateFormat.format(task.finishDate));
     }
 
     private void SetPriority(Task task){

@@ -5,6 +5,8 @@
     <string name="description_label">Description</string>
     <string name="status_label">Status</string>
     <string name="priority_label">Priority</string>
+    <string name="finish_date_label">Finish date</string>
+    <string name="finish_time_label">Finish time</string>
 
     <string-array name="status_array">
         <item>To do</item>
