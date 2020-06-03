@@ -103,6 +103,10 @@ public class EditTaskView extends LinearLayout {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 task.status = i;
+
+                if(i ==2 && task.closeDate ==null){
+                    task.closeDate = Calendar.getInstance().getTime();
+                }
             }
 
             @Override

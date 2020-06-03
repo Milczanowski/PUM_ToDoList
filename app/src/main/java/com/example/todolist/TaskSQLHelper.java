@@ -1,17 +1,20 @@
 package com.example.todolist;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
 import com.example.todolist.sqldb.ISQLHelper;
+import com.example.todolist.sqldb.SQLDatabase;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TaskSQLHelper implements ISQLHelper<Task> {
 
     protected static final String COLUMN_NAME = "name";
+    protected static final String COLUMN_ID = "id";
     protected static final String COLUMN_DESCRIPTION = "description";
     protected static final String COLUMN_CREATE_DATE = "create_date";
     protected static final String COLUMN_STATUS = "status";
@@ -19,24 +22,29 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     protected static final String COLUMN_PRIORITY = "priority";
     protected static final String COLUMN_FINISH_DATE = "finish_date";
 
-    private Map<String, String> columns;
+    private ArrayList<String> columns;
     private String orderColumn;
     private SQLSortOrder sortOrder;
 
+    private AttachmentSQLHelper attachmentSQLHelper;
+    private SQLDatabase<Attachment> attachmentSQLDatabase;
 
-    public  TaskSQLHelper(){
-        columns = new HashMap<>();
+    public  TaskSQLHelper(Context context, String databaseName, Integer version){
+        columns = new ArrayList<>();
 
-        columns.put(COLUMN_NAME, "TEXT");
-        columns.put(COLUMN_DESCRIPTION, "TEXT");
-        columns.put(COLUMN_CREATE_DATE, "INTEGER");
-        columns.put(COLUMN_STATUS, "INTEGER");
-        columns.put(COLUMN_CLOSE_DATE, "INTEGER");
-        columns.put(COLUMN_PRIORITY, "INTEGER");
-        columns.put(COLUMN_FINISH_DATE, "INTEGER");
+        columns.add(String.format("%s %s", COLUMN_NAME, "TEXT"));
+        columns.add(String.format("%s %s",COLUMN_DESCRIPTION, "TEXT"));
+        columns.add(String.format("%s %s",COLUMN_CREATE_DATE, "INTEGER"));
+        columns.add(String.format("%s %s",COLUMN_STATUS, "INTEGER"));
+        columns.add(String.format("%s %s",COLUMN_CLOSE_DATE, "INTEGER"));
+        columns.add(String.format("%s %s",COLUMN_PRIORITY, "INTEGER"));
+        columns.add(String.format("%s %s",COLUMN_FINISH_DATE, "INTEGER"));
 
         orderColumn = COLUMN_CREATE_DATE;
         sortOrder = SQLSortOrder.ASC;
+
+        attachmentSQLHelper = new AttachmentSQLHelper(GetTableName(), GetPrimaryKey());
+        attachmentSQLDatabase = new SQLDatabase<Attachment>(context, databaseName, attachmentSQLHelper, version);
     }
 
     @Override
@@ -45,7 +53,12 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     }
 
     @Override
-    public Map<String, String> GetColumns() {
+    public String GetPrimaryKey() {
+        return COLUMN_ID;
+    }
+
+    @Override
+    public ArrayList<String> GetColumns() {
         return columns;
     }
 
@@ -53,6 +66,7 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     public Task GetObject(Cursor cursor) {
         Task task = new Task();
 
+        task.SetID(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
         task.name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
         task.description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
         task.status = cursor.getInt(cursor.getColumnIndex(COLUMN_STATUS));
@@ -61,6 +75,9 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
         task.createDate = GetDateValue(cursor, COLUMN_CREATE_DATE);
         task.closeDate = GetDateValue(cursor, COLUMN_CLOSE_DATE);
         task.finishDate = GetDateValue(cursor, COLUMN_FINISH_DATE);
+
+        attachmentSQLHelper.SetTaskID(task.GetID());
+        task.attachments = attachmentSQLDatabase.GetAllObjects();
 
         return task;
     }
@@ -102,10 +119,17 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     public String GetOrderColumn() {
         return orderColumn;
     }
-
     @Override
     public SQLSortOrder GetSortOrder() {
         return sortOrder;
+    }
+    @Override
+    public String GetWhereColumn() {
+        return null;
+    }
+    @Override
+    public Object GetWhereValue() {
+        return null;
     }
 
     public void SetSortOrder(SQLSortOrder sortOrder){

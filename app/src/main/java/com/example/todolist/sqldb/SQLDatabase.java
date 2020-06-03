@@ -5,14 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.todolist.appcontroller.IStorable;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implements IStorable<T> {
-    public static final String COLUMN_ID = "id";
 
     private ISQLHelper<T> sqlHelper;
 
@@ -25,11 +24,13 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String columns = "";
 
-        for ( Map.Entry<String, String> column : sqlHelper.GetColumns().entrySet()){
-            columns += String.format(", %s %s", column.getKey(), column.getValue());
+        for (String column : sqlHelper.GetColumns()){
+            columns += String.format(", %s", column);
         }
 
-        sqLiteDatabase.execSQL(String.format("create table %s (%s integer primary key %s)", sqlHelper.GetTableName(), COLUMN_ID, columns));
+        String query = String.format("create table %s (%s integer primary key %s)", sqlHelper.GetTableName(), sqlHelper.GetPrimaryKey(), columns);
+        
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override
@@ -45,12 +46,15 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         ArrayList<T> allObjects = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =  db.rawQuery( String.format("SELECT * FROM %s ORDER BY %s %s", sqlHelper.GetTableName(), sqlHelper.GetOrderColumn(), sqlHelper.GetSortOrder()), null );
+
+        String query = String.format("SELECT * FROM %s %s %s;", sqlHelper.GetTableName(), GetWhereValue(), GetSortValue());
+        Log.d("TODO_1", query);
+
+        Cursor cursor =  db.rawQuery(query, null );
         cursor.moveToFirst();
 
         while(!cursor.isAfterLast()) {
             T obj = sqlHelper.GetObject(cursor);
-            obj.SetID(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 
             allObjects.add(obj);
             cursor.moveToNext();
@@ -59,16 +63,51 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         return allObjects;
     }
 
+    private String GetSortValue(){
+        String orderColumn = sqlHelper.GetOrderColumn();
+        ISQLHelper.SQLSortOrder sortOrder = sqlHelper.GetSortOrder();
+
+        if(orderColumn == null)
+            return "";
+
+        if(orderColumn.isEmpty())
+            return "";
+
+        if(sortOrder == null)
+            return "";
+        return String.format(" ORDER BY %s %s", orderColumn, sortOrder);
+    }
+
+    private String GetWhereValue(){
+        String whereColumn = sqlHelper.GetWhereColumn();
+        Object whereValue = sqlHelper.GetWhereValue();
+
+        if(whereColumn == null)
+            return "";
+
+        if(whereColumn.isEmpty())
+            return "";
+
+        if(whereValue == null)
+            return "";
+
+        return String.format(" WHERE %s = %s", whereColumn, whereValue);
+    }
+
+
     @Override
     public ArrayList<Long> GetSortedIDs() {
         ArrayList<Long> allObjects = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =  db.rawQuery( String.format("SELECT %s FROM %s ORDER BY %s %s", COLUMN_ID, sqlHelper.GetTableName(), sqlHelper.GetOrderColumn(), sqlHelper.GetSortOrder()), null );
+        String query = String.format("SELECT %s FROM %s %s %s;", sqlHelper.GetPrimaryKey(), sqlHelper.GetTableName(), GetWhereValue(), GetSortValue());
+
+        Cursor cursor =  db.rawQuery(query, null );
+
         cursor.moveToFirst();
 
         while(!cursor.isAfterLast()) {
-            allObjects.add(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+            allObjects.add(cursor.getLong(cursor.getColumnIndex(sqlHelper.GetPrimaryKey())));
             cursor.moveToNext();
         }
 
@@ -78,7 +117,7 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
     @Override
     public boolean RemoveObject(T object) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(sqlHelper.GetTableName(),  String.format("%s = ? ", COLUMN_ID), new String[] { Long.toString(object.GetID()) }) > 0;
+        return db.delete(sqlHelper.GetTableName(),  String.format("%s = ? ", sqlHelper.GetPrimaryKey()), new String[] { Long.toString(object.GetID()) }) > 0;
     }
 
     @Override
@@ -87,7 +126,7 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         ContentValues contentValues = sqlHelper.GetContentValue(object);
 
         if(object.GetID()>0){
-            db.update(sqlHelper.GetTableName(), contentValues, String.format("%s = ? ", COLUMN_ID), new String[] { Long.toString(object.GetID()) } );
+            db.update(sqlHelper.GetTableName(), contentValues, String.format("%s = ? ", sqlHelper.GetPrimaryKey()), new String[] { Long.toString(object.GetID()) } );
         }else {
             object.SetID(db.insert(sqlHelper.GetTableName(), null, contentValues));
         }

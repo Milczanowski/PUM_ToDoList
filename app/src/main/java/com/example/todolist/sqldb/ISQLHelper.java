@@ -2,9 +2,7 @@ package com.example.todolist.sqldb;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import java.util.Map;
-
-
+import java.util.ArrayList;
 
 public interface ISQLHelper<T extends ISQLObject> {
     enum SQLSortOrder {
@@ -13,9 +11,12 @@ public interface ISQLHelper<T extends ISQLObject> {
     }
 
     public String GetTableName();
-    public Map<String, String> GetColumns();
+    public String GetPrimaryKey();
+    public ArrayList<String> GetColumns();
     public T GetObject(Cursor cursor);
     public ContentValues GetContentValue(T object);
     public String GetOrderColumn();
     public SQLSortOrder GetSortOrder();
+    public String GetWhereColumn();
+    public Object GetWhereValue();
 }

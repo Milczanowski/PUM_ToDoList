@@ -115,7 +115,15 @@ public class MainView implements IView<Task> {
     @Override
     public void ViewUpdate(Task object) {
         if(viewMap.containsKey(object.GetID())) {
-            viewMap.get(object.GetID()).SetTask(object);
+            SmallTaskView view = viewMap.get(object.GetID());
+            view.SetTask(object);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainViewActions.ShowTaskView(object);
+                }
+            });
         }
     }
 }

@@ -9,12 +9,14 @@ import com.example.todolist.sqldb.SQLDatabase;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final String DATABASE_NAME = "todolist.db";
+    private static final int DATABASE_VERSION = 1;
     private static final int ADD_TASK_ACTIVITY_REQUEST_CODE = 1;
     private static final int TASK_ACTIVITY_REQUEST_CODE = 2;
 
-    private SQLDatabase<Task> taskSQLDatabase;
-    private Controller<Task> controller;
     private TaskSQLHelper taskSQLHelper;
+    private SQLDatabase<Task> taskSQLDatabase;
+
+    private Controller<Task> controller;
 
     private MainView mainView;
 
@@ -23,8 +25,9 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        taskSQLHelper = new TaskSQLHelper();
+        taskSQLHelper = new TaskSQLHelper(getApplicationContext(), DATABASE_NAME, DATABASE_VERSION);
         taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, taskSQLHelper, 1);
+
         controller = new Controller<>(taskSQLDatabase);
 
         mainView = new MainView(this, getApplicationContext(), this);
