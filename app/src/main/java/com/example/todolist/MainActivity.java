@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.todolist.appcontroller.Controller;
+import com.example.todolist.sqldb.ISQLHelper;
 import com.example.todolist.sqldb.SQLDatabase;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
@@ -13,6 +14,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
 
     private SQLDatabase<Task> taskSQLDatabase;
     private Controller<Task> controller;
+    private TaskSQLHelper taskSQLHelper;
 
     private MainView mainView;
 
@@ -21,7 +23,8 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, new TaskSQLHelper(), 1);
+        taskSQLHelper = new TaskSQLHelper();
+        taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, taskSQLHelper, 1);
         controller = new Controller<>(taskSQLDatabase);
 
         mainView = new MainView(this, getApplicationContext(), this);
@@ -92,5 +95,60 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         Task task = (Task) data.getSerializableExtra(INTENT_TASK);
         if(task!=null)
             controller.UpdateObject(task);
+    }
+
+    @Override
+    public void SetSorting(Integer index) {
+        switch (index) {
+            case 0:{
+                taskSQLHelper.SetSortedByCreateDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 1:{
+                taskSQLHelper.SetSortedByPriority();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 2:{
+                taskSQLHelper.SetSortedByName();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 3:{
+                taskSQLHelper.SetSortedByStatus();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 4:{
+                taskSQLHelper.SetSortedByCloseDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 5:{
+                taskSQLHelper.SetSortedByFinishDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.ASC);
+            }break;
+            case 6:{
+                taskSQLHelper.SetSortedByCreateDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+            case 7:{
+                taskSQLHelper.SetSortedByPriority();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+            case 8:{
+                taskSQLHelper.SetSortedByName();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+            case 9:{
+                taskSQLHelper.SetSortedByStatus();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+            case 10:{
+                taskSQLHelper.SetSortedByCloseDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+            case 11:{
+                taskSQLHelper.SetSortedByFinishDate();
+                taskSQLHelper.SetSortOrder(ISQLHelper.SQLSortOrder.DESC);
+            }break;
+        }
+        controller.SortView();
     }
 }

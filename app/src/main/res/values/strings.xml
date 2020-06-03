@@ -31,10 +31,18 @@
         <item>High</item>
     </string-array>
     <string-array name="sorting_array">
-        <item>Create date</item>
-        <item>Priority</item>
-        <item>Name</item>
-        <item>Status</item>
+        <item>Create date ascending</item>
+        <item>Priority ascending</item>
+        <item>Name ascending</item>
+        <item>Status ascending</item>
+        <item>Close date ascending</item>
+        <item>Finish date ascending</item>
+        <item>Create date descending</item>
+        <item>Priority descending</item>
+        <item>Name descending</item>
+        <item>Status descending</item>
+        <item>Close date descending</item>
+        <item>Finish date descending</item>
     </string-array>
 </resources>
 

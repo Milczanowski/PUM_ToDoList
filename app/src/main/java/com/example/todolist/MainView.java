@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import com.example.todolist.appcontroller.IIDable;
 import com.example.todolist.appcontroller.IView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainView implements IView<Task> {
@@ -55,7 +57,7 @@ public class MainView implements IView<Task> {
         sortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                mainViewActions.SetSorting(i);
             }
 
             @Override
@@ -92,6 +94,21 @@ public class MainView implements IView<Task> {
             View view = viewMap.get(object.GetID());
             tasksLayout.removeView(view);
             viewMap.remove(object.GetID());
+        }
+    }
+
+    @Override
+    public void ViewSetOrder(ArrayList<IIDable> ordered) {
+        tasksLayout.removeAllViews();
+
+        for(IIDable iiDable: ordered){
+            Long id =  iiDable.GetID();
+
+            if(!viewMap.containsKey(id))
+                continue;
+
+            View view = viewMap.get(id);
+            tasksLayout.addView(view);
         }
     }
 

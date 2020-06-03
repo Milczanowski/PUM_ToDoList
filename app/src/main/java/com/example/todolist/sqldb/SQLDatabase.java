@@ -45,14 +45,30 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         ArrayList<T> allObjects = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =  db.rawQuery( String.format("SELECT * from %s", sqlHelper.GetTableName()), null );
+        Cursor cursor =  db.rawQuery( String.format("SELECT * FROM %s ORDER BY %s %s", sqlHelper.GetTableName(), sqlHelper.GetOrderColumn(), sqlHelper.GetSortOrder()), null );
         cursor.moveToFirst();
 
         while(!cursor.isAfterLast()) {
             T obj = sqlHelper.GetObject(cursor);
-            obj.SetID(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            obj.SetID(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 
             allObjects.add(obj);
+            cursor.moveToNext();
+        }
+
+        return allObjects;
+    }
+
+    @Override
+    public ArrayList<Long> GetSortedIDs() {
+        ArrayList<Long> allObjects = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =  db.rawQuery( String.format("SELECT %s FROM %s ORDER BY %s %s", COLUMN_ID, sqlHelper.GetTableName(), sqlHelper.GetOrderColumn(), sqlHelper.GetSortOrder()), null );
+        cursor.moveToFirst();
+
+        while(!cursor.isAfterLast()) {
+            allObjects.add(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
             cursor.moveToNext();
         }
 

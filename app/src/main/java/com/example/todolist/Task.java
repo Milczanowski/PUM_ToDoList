@@ -1,11 +1,12 @@
 package com.example.todolist;
 
+import com.example.todolist.appcontroller.IIDable;
 import com.example.todolist.sqldb.ISQLObject;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class Task implements ISQLObject, Serializable {
+public class Task implements ISQLObject, IIDable, Serializable {
     private long id;
     public String name, description;
     public int status, priority;

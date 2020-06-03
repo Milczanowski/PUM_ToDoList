@@ -20,6 +20,9 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     protected static final String COLUMN_FINISH_DATE = "finish_date";
 
     private Map<String, String> columns;
+    private String orderColumn;
+    private SQLSortOrder sortOrder;
+
 
     public  TaskSQLHelper(){
         columns = new HashMap<>();
@@ -31,6 +34,9 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
         columns.put(COLUMN_CLOSE_DATE, "INTEGER");
         columns.put(COLUMN_PRIORITY, "INTEGER");
         columns.put(COLUMN_FINISH_DATE, "INTEGER");
+
+        orderColumn = COLUMN_CREATE_DATE;
+        sortOrder = SQLSortOrder.ASC;
     }
 
     @Override
@@ -90,6 +96,44 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
             contentValues.put(COLUMN_FINISH_DATE, task.finishDate.getTime());
 
         return  contentValues;
+    }
+
+    @Override
+    public String GetOrderColumn() {
+        return orderColumn;
+    }
+
+    @Override
+    public SQLSortOrder GetSortOrder() {
+        return sortOrder;
+    }
+
+    public void SetSortOrder(SQLSortOrder sortOrder){
+        this.sortOrder = sortOrder;
+    }
+
+    public void SetSortedByName(){
+        orderColumn = COLUMN_NAME;
+    }
+
+    public void SetSortedByCreateDate(){
+        orderColumn = COLUMN_CREATE_DATE;
+    }
+
+    public void SetSortedByPriority(){
+        orderColumn = COLUMN_PRIORITY;
+    }
+
+    public void SetSortedByCloseDate(){
+        orderColumn = COLUMN_CLOSE_DATE;
+    }
+
+    public void SetSortedByStatus(){
+        orderColumn = COLUMN_STATUS;
+    }
+
+    public void SetSortedByFinishDate(){
+        orderColumn = COLUMN_FINISH_DATE;
     }
 }
 
