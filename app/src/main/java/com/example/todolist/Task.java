@@ -13,6 +13,7 @@ public class Task implements ISQLObject, IIDable, Serializable {
     public int status, priority;
     public Date createDate, closeDate, finishDate;
     public ArrayList<Attachment> attachments;
+    public ArrayList<Attachment> deleteAttachments;
 
     public Task(){
         id= -1;
@@ -20,6 +21,7 @@ public class Task implements ISQLObject, IIDable, Serializable {
         closeDate = null;
         finishDate = null;
         attachments = new ArrayList<>();
+        deleteAttachments = new ArrayList<>();
     }
 
     @Override

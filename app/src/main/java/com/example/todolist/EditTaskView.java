@@ -20,8 +20,9 @@ import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
-public class EditTaskView extends LinearLayout implements IPhotoReceiver {
+public class EditTaskView extends LinearLayout implements IPhotoReceiver, IAttachmentDeleteable {
 
     private EditText nameEditText, descriptionEditText;
     private Spinner statusSpinner, prioritySpinner;
@@ -35,6 +36,8 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver {
     private Task task;
     private Context context;
     private ICamera camera;
+
+    private HashMap<Long, AttachmentView> attachmentViews;
 
     public EditTaskView(Context context, Task task, ICamera camera) {
         super(context);
@@ -205,12 +208,14 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver {
     }
 
     private void SetAttachment(){
+        attachmentViews = new HashMap<>();
         attachmentLayout = findViewById(R.id.attachment_layout);
 
         for(Attachment attachment: task.attachments)
         {
-            AttachmentView attachmentView = new AttachmentView(context,attachment);
+            AttachmentView attachmentView = new AttachmentView(context,attachment, this);
             attachmentLayout.addView(attachmentView);
+            attachmentViews.put(attachment.GetID(), attachmentView);
         }
     }
 
@@ -232,7 +237,18 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver {
         attachment.path = path;
         task.attachments.add(attachment);
 
-        AttachmentView attachmentView = new AttachmentView(context,attachment);
+        AttachmentView attachmentView = new AttachmentView(context,attachment, this);
         attachmentLayout.addView(attachmentView);
+        attachmentViews.put(attachment.GetID(), attachmentView);
+    }
+
+    @Override
+    public void DeleteAttachment(Attachment attachment) {
+        task.attachments.remove(attachment);
+        if(attachmentViews.containsKey(attachment.GetID())){
+            attachmentLayout.removeView(attachmentViews.get(attachment.GetID()));
+            attachmentViews.remove(attachment.GetID());
+            task.deleteAttachments.add(attachment);
+        }
     }
 }

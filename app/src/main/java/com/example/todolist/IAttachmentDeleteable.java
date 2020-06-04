@@ -1,5 +1,5 @@
 package com.example.todolist;
 
-public interface IAttachemntDeleteable {
+public interface IAttachmentDeleteable {
     public void DeleteAttachment(Attachment attachment);
 }

@@ -46,6 +46,10 @@ public class TaskSQLDatabase extends SQLDatabase<Task> {
             for(Attachment attachment : object.attachments)
                 attachmentSQLDatabase.RemoveObject(attachment);
 
+            for(Attachment attachment : object.deleteAttachments){
+                attachmentSQLDatabase.RemoveObject(attachment);
+            }
+
             return  true;
         }
         return false;
@@ -54,6 +58,12 @@ public class TaskSQLDatabase extends SQLDatabase<Task> {
     @Override
     public boolean AddOrUpdateObject(Task object) {
         if(super.AddOrUpdateObject(object)){
+            for(Attachment attachment : object.deleteAttachments){
+                attachmentSQLDatabase.RemoveObject(attachment);
+            }
+
+            object.deleteAttachments.clear();
+
             for(Attachment attachment : object.attachments) {
                 attachment.task = object.GetID();
                 attachmentSQLDatabase.AddOrUpdateObject(attachment);
