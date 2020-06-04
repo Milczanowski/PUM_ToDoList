@@ -21,7 +21,7 @@
     <string name="delete_attachment">Delete</string>
     <string name="delete_attachment_dialog">Delete attachment</string>
     <string name="delete_attachment_dialog_message">Are you sure you want to delete the attachment?</string>
-
+    <string name="export_button">Export</string>
     <string-array name="status_array">
         <item>To do</item>
         <item>In progress</item>
