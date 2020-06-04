@@ -76,7 +76,7 @@ public class AttachmentSQLHelper implements ISQLHelper<Attachment> {
 
     @Override
     public Object GetWhereValue() {
-        return null;
+        return taskID;
     }
 
     public void SetTaskID(Long taskID){

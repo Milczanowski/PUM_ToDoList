@@ -18,13 +18,15 @@ public class AttachmentView extends LinearLayout {
     private IAttachmentDeleteable attachmentDeleteable;
     private Attachment attachment;
     protected Context context;
+    private IPhotoView photoView;
 
-    public AttachmentView(Context context, Attachment attachment, IAttachmentDeleteable attachmentDeleteable) {
+    public AttachmentView(Context context, Attachment attachment, IAttachmentDeleteable attachmentDeleteable, IPhotoView photoView) {
         super(context);
 
         this.context = context;
         this.attachment = attachment;
         this.attachmentDeleteable = attachmentDeleteable;
+        this.photoView = photoView;
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.attachment_layout, this);
@@ -39,6 +41,13 @@ public class AttachmentView extends LinearLayout {
             @Override
             public void onClick(View view) {
                 ShowDeleteDialog();
+            }
+        });
+
+        name.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                photoView.OpenGallery(attachment.path);
             }
         });
     }

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +14,7 @@ import java.util.Date;
 
 import androidx.core.content.FileProvider;
 
-public class CameraActivity extends BaseActivity implements ICamera{
+public class CameraActivity extends BaseActivity implements ICamera, IPhotoView{
     private static final int REQUEST_IMAGE_CAPTURE = 3;
 
     protected String photoPath;
@@ -69,7 +68,6 @@ public class CameraActivity extends BaseActivity implements ICamera{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("TODO_1", requestCode + " " + resultCode);
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if(resultCode == RESULT_OK){
@@ -91,10 +89,12 @@ public class CameraActivity extends BaseActivity implements ICamera{
         getApplicationContext().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
     }
 
-    protected void OpenGalery(){
+    @Override
+    public void OpenGallery(String photoPath){
+
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setType("image/*");
+        intent.setDataAndType(Uri.parse(photoPath), "image/*");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

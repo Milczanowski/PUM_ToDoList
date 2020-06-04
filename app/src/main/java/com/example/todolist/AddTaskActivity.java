@@ -24,7 +24,7 @@ public class AddTaskActivity extends CameraActivity {
         task = new Task();
 
         contentLayout = findViewById(R.id.contentLayout);
-        editTaskView = new EditTaskView(AddTaskActivity.this, task,this);
+        editTaskView = new EditTaskView(AddTaskActivity.this, task,this, this);
         contentLayout.addView(editTaskView,0);
 
         addTaskButton = findViewById(R.id.addTaskButton);

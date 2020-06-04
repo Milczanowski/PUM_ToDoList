@@ -32,7 +32,7 @@ public class TaskActivity extends CameraActivity {
         task = (Task) getIntent().getSerializableExtra(INTENT_TASK);
 
 
-        editTaskView = new EditTaskView(TaskActivity.this, task, this);
+        editTaskView = new EditTaskView(TaskActivity.this, task, this, this);
         contentLayout.addView(editTaskView,0);
         editTaskView.setFocusable(false);
 

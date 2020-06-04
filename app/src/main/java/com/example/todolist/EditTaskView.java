@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,10 +35,11 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver, IAttac
     private Task task;
     private Context context;
     private ICamera camera;
+    private IPhotoView photoView;
 
     private HashMap<Long, AttachmentView> attachmentViews;
 
-    public EditTaskView(Context context, Task task, ICamera camera) {
+    public EditTaskView(Context context, Task task, ICamera camera, IPhotoView photoView) {
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -48,6 +48,7 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver, IAttac
         this.camera = camera;
         this.task = task;
         this.context = context;
+        this.photoView = photoView;
 
         calendar = Calendar.getInstance();
 
@@ -213,7 +214,7 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver, IAttac
 
         for(Attachment attachment: task.attachments)
         {
-            AttachmentView attachmentView = new AttachmentView(context,attachment, this);
+            AttachmentView attachmentView = new AttachmentView(context,attachment, this, photoView);
             attachmentLayout.addView(attachmentView);
             attachmentViews.put(attachment.GetID(), attachmentView);
         }
@@ -230,14 +231,12 @@ public class EditTaskView extends LinearLayout implements IPhotoReceiver, IAttac
         if(path.isEmpty())
             return;
 
-        Log.d("TODO_1", path);
-
         Attachment attachment = new Attachment();
         attachment.task = task.GetID();
         attachment.path = path;
         task.attachments.add(attachment);
 
-        AttachmentView attachmentView = new AttachmentView(context,attachment, this);
+        AttachmentView attachmentView = new AttachmentView(context,attachment, this, photoView);
         attachmentLayout.addView(attachmentView);
         attachmentViews.put(attachment.GetID(), attachmentView);
     }
