@@ -16,7 +16,9 @@
     <string name="delete_dialog">Delete task</string>
     <string name="delete_dialog_message">Are you sure you want to delete the task?</string>
     <string name="sort_label">Sort by:</string>
-
+    <string name="attachments_label">Attachments</string>
+    <string name="add_attachments_button">Add Attachment</string>
+    <string name="delete_attachment">Delete</string>
 
     <string-array name="status_array">
         <item>To do</item>

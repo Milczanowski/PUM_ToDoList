@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.example.todolist.appcontroller.Controller;
 import com.example.todolist.sqldb.ISQLHelper;
-import com.example.todolist.sqldb.SQLDatabase;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final String DATABASE_NAME = "todolist.db";
@@ -14,7 +13,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final int TASK_ACTIVITY_REQUEST_CODE = 2;
 
     private TaskSQLHelper taskSQLHelper;
-    private SQLDatabase<Task> taskSQLDatabase;
+    private TaskSQLDatabase taskSQLDatabase;
 
     private Controller<Task> controller;
 
@@ -26,7 +25,8 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         setContentView(R.layout.activity_main);
 
         taskSQLHelper = new TaskSQLHelper(getApplicationContext(), DATABASE_NAME, DATABASE_VERSION);
-        taskSQLDatabase = new SQLDatabase<>(getApplicationContext(), DATABASE_NAME, taskSQLHelper, 1);
+
+        taskSQLDatabase = new TaskSQLDatabase(getApplicationContext(), DATABASE_NAME, taskSQLHelper, 1);
 
         controller = new Controller<>(taskSQLDatabase);
 

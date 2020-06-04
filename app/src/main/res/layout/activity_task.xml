@@ -6,87 +6,97 @@
     android:layout_height="match_parent"
     tools:context=".TaskActivity">
 
-    <LinearLayout
-        android:id="@+id/contentLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-      <LinearLayout
-      android:id="@+id/createTimeLinearLayout"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:orientation="horizontal"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp">
-
-          <TextView
-              android:id="@+id/textView4"
-              android:layout_width="80dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="@string/create_time_label"
-              android:textSize="18sp"
-              android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/createTextView"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="viewEnd"
-            android:textSize="18sp" />
-
-      </LinearLayout>
-      <LinearLayout
-          android:id="@+id/closeTimeLinearLayout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:paddingTop="10dp"
-          android:paddingBottom="10dp">
-
-          <TextView
-              android:id="@+id/textView5"
-              android:layout_width="80dp"
-              android:layout_height="wrap_content"
-              android:layout_weight="1"
-              android:text="@string/close_time_label"
-              android:textSize="18sp"
-              android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/closeTextView"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:textAlignment="viewEnd"
-            android:textSize="18sp" />
-
-      </LinearLayout>
-
         <LinearLayout
+            android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/createTimeLinearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/delete_task_button"
-                android:textColor="#E91E63" />
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/create_time_label"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/createTextView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textAlignment="viewEnd"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/closeTimeLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/close_time_label"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/closeTextView"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:textAlignment="viewEnd"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/delete_task_button"
+                    android:textColor="#E91E63" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

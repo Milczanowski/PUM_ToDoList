@@ -2,7 +2,9 @@ package com.example.todolist;
 
 import com.example.todolist.sqldb.ISQLObject;
 
-public class Attachment implements ISQLObject {
+import java.io.Serializable;
+
+public class Attachment implements ISQLObject, Serializable {
     private long id;
     public long task;
     public String path;

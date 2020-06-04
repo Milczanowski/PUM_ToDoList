@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import java.util.Calendar;
 
 
-public class AddTaskActivity extends BaseActivity {
+public class AddTaskActivity extends CameraActivity {
     private Button addTaskButton;
     private LinearLayout contentLayout;
 
@@ -24,7 +24,7 @@ public class AddTaskActivity extends BaseActivity {
         task = new Task();
 
         contentLayout = findViewById(R.id.contentLayout);
-        editTaskView = new EditTaskView(AddTaskActivity.this, task);
+        editTaskView = new EditTaskView(AddTaskActivity.this, task,this);
         contentLayout.addView(editTaskView,0);
 
         addTaskButton = findViewById(R.id.addTaskButton);

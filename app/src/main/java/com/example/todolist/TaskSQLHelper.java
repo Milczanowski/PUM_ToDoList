@@ -26,9 +26,6 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     private String orderColumn;
     private SQLSortOrder sortOrder;
 
-    private AttachmentSQLHelper attachmentSQLHelper;
-    private SQLDatabase<Attachment> attachmentSQLDatabase;
-
     public  TaskSQLHelper(Context context, String databaseName, Integer version){
         columns = new ArrayList<>();
 
@@ -42,9 +39,6 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
 
         orderColumn = COLUMN_CREATE_DATE;
         sortOrder = SQLSortOrder.ASC;
-
-        attachmentSQLHelper = new AttachmentSQLHelper(GetTableName(), GetPrimaryKey());
-        attachmentSQLDatabase = new SQLDatabase<Attachment>(context, databaseName, attachmentSQLHelper, version);
     }
 
     @Override
@@ -66,7 +60,7 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
     public Task GetObject(Cursor cursor) {
         Task task = new Task();
 
-        task.SetID(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+        task.SetID(cursor.getLong(cursor.getColumnIndex(GetPrimaryKey())));
         task.name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
         task.description = cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION));
         task.status = cursor.getInt(cursor.getColumnIndex(COLUMN_STATUS));
@@ -75,9 +69,6 @@ public class TaskSQLHelper implements ISQLHelper<Task> {
         task.createDate = GetDateValue(cursor, COLUMN_CREATE_DATE);
         task.closeDate = GetDateValue(cursor, COLUMN_CLOSE_DATE);
         task.finishDate = GetDateValue(cursor, COLUMN_FINISH_DATE);
-
-        attachmentSQLHelper.SetTaskID(task.GetID());
-        task.attachments = attachmentSQLDatabase.GetAllObjects();
 
         return task;
     }

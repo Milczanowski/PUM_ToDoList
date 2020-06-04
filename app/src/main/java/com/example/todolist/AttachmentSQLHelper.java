@@ -43,6 +43,7 @@ public class AttachmentSQLHelper implements ISQLHelper<Attachment> {
     @Override
     public Attachment GetObject(Cursor cursor) {
         Attachment attachment = new Attachment();
+        attachment.SetID(cursor.getLong(cursor.getColumnIndex(GetPrimaryKey())));
         attachment.path = cursor.getString(cursor.getColumnIndex(COLUMN_PATH));
         attachment.task = cursor.getLong(cursor.getColumnIndex(COLUMN_TASK));
 

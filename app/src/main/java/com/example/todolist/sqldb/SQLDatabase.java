@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.example.todolist.appcontroller.IStorable;
 
@@ -22,14 +21,7 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String columns = "";
-
-        for (String column : sqlHelper.GetColumns()){
-            columns += String.format(", %s", column);
-        }
-
-        String query = String.format("create table %s (%s integer primary key %s)", sqlHelper.GetTableName(), sqlHelper.GetPrimaryKey(), columns);
-        
+        String query = GetCreateQuery(sqlHelper);
         sqLiteDatabase.execSQL(query);
     }
 
@@ -41,6 +33,16 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         }
     }
 
+    protected <Y extends ISQLObject>String GetCreateQuery(ISQLHelper<Y> sqlHelper){
+        String columns = "";
+
+        for (String column : sqlHelper.GetColumns()){
+            columns += String.format(", %s", column);
+        }
+
+        return String.format("create table %s (%s integer primary key %s)", sqlHelper.GetTableName(), sqlHelper.GetPrimaryKey(), columns);
+    }
+
     @Override
     public ArrayList<T> GetAllObjects() {
         ArrayList<T> allObjects = new ArrayList<>();
@@ -48,7 +50,6 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = String.format("SELECT * FROM %s %s %s;", sqlHelper.GetTableName(), GetWhereValue(), GetSortValue());
-        Log.d("TODO_1", query);
 
         Cursor cursor =  db.rawQuery(query, null );
         cursor.moveToFirst();
@@ -93,7 +94,6 @@ public class SQLDatabase <T extends  ISQLObject> extends SQLiteOpenHelper implem
 
         return String.format(" WHERE %s = %s", whereColumn, whereValue);
     }
-
 
     @Override
     public ArrayList<Long> GetSortedIDs() {

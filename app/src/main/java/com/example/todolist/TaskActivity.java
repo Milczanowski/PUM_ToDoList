@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ActionMode;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,7 +11,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-public class TaskActivity extends BaseActivity {
+public class TaskActivity extends CameraActivity {
     private LinearLayout contentLayout, closeTimeLayout, createTimeLayout;
     private TextView createTextView, closeTextView;
     private Button deleteButton;
@@ -23,7 +21,6 @@ public class TaskActivity extends BaseActivity {
     private EditTaskView editTaskView;
 
     private Task task;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +32,7 @@ public class TaskActivity extends BaseActivity {
         task = (Task) getIntent().getSerializableExtra(INTENT_TASK);
 
 
-        editTaskView = new EditTaskView(TaskActivity.this, task);
+        editTaskView = new EditTaskView(TaskActivity.this, task, this);
         contentLayout.addView(editTaskView,0);
         editTaskView.setFocusable(false);
 

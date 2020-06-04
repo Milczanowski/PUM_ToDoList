@@ -5,10 +5,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -19,25 +21,28 @@ import android.widget.TimePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class EditTaskView extends LinearLayout {
+public class EditTaskView extends LinearLayout implements IPhotoReceiver {
 
     private EditText nameEditText, descriptionEditText;
     private Spinner statusSpinner, prioritySpinner;
     private TextView dateTextView, timeTextView;
-    private LinearLayout dateLinearLayout, timeLinearLayout;
+    private LinearLayout dateLinearLayout, timeLinearLayout, attachmentLayout;
+    private Button addAttachemntButton;
     private Calendar calendar;
 
     private SimpleDateFormat dateFormat, timeFormat;
 
     private Task task;
     private Context context;
+    private ICamera camera;
 
-    public EditTaskView(Context context, Task task) {
+    public EditTaskView(Context context, Task task, ICamera camera) {
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.edit_task_layout, this);
 
+        this.camera = camera;
         this.task = task;
         this.context = context;
 
@@ -48,6 +53,15 @@ public class EditTaskView extends LinearLayout {
         SetStatusSpinner();
         SetPrioritySpinner();
         SetFinishDate();
+        SetAttachment();
+
+        addAttachemntButton = findViewById(R.id.addAttachmentButton);
+        addAttachemntButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAddAttachment();
+            }
+        });
     }
 
     private void SetNameEdit(){
@@ -188,5 +202,37 @@ public class EditTaskView extends LinearLayout {
                 },hour, minute, true).show();
             }
         });
+    }
+
+    private void SetAttachment(){
+        attachmentLayout = findViewById(R.id.attachment_layout);
+
+        for(Attachment attachment: task.attachments)
+        {
+            AttachmentView attachmentView = new AttachmentView(context,attachment);
+            attachmentLayout.addView(attachmentView);
+        }
+    }
+
+    private void OnAddAttachment(){
+        camera.TakePhoto(this);
+    }
+
+    @Override
+    public void ReceivePhoto(String path) {
+        if(path == null)
+            return;
+        if(path.isEmpty())
+            return;
+
+        Log.d("TODO_1", path);
+
+        Attachment attachment = new Attachment();
+        attachment.task = task.GetID();
+        attachment.path = path;
+        task.attachments.add(attachment);
+
+        AttachmentView attachmentView = new AttachmentView(context,attachment);
+        attachmentLayout.addView(attachmentView);
     }
 }

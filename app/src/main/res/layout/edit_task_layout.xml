@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFEB3B"
@@ -21,11 +21,11 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:paddingBottom="15dp"
+        android:paddingBottom="10dp"
         android:password="false" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/descriptiontextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFEB3B"
@@ -41,15 +41,15 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp" />
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" />
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingBottom="10dp"
-      android:paddingTop="10dp">
+      android:paddingBottom="5dp"
+      android:paddingTop="5dp">
 
       <TextView
           android:id="@+id/textView2"
@@ -74,8 +74,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/textView"
@@ -100,8 +100,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp">
+      android:paddingTop="5dp"
+      android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/textView3"
@@ -126,8 +126,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
       <TextView
           android:id="@+id/textView4"
@@ -148,4 +148,37 @@
 
   </LinearLayout>
 
+    <LinearLayout
+         android:id="@+id/attachmentsLayout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:paddingBottom="5dp"
+         android:paddingTop="5dp">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/attachments_label"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+      
+        <Button
+            android:id="@+id/addAttachmentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="@string/add_attachments_button" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/attachment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"></LinearLayout>
 </LinearLayout>
