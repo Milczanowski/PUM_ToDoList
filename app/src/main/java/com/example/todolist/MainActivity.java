@@ -1,7 +1,10 @@
 package com.example.todolist;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -12,7 +15,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.FileProvider;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
@@ -20,6 +27,7 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final int DATABASE_VERSION = 1;
     private static final int ADD_TASK_ACTIVITY_REQUEST_CODE = 1;
     private static final int TASK_ACTIVITY_REQUEST_CODE = 2;
+    private static final String CHANNEL_ID = "TODOLIST_CHANGEL" ;
 
     private TaskSQLHelper taskSQLHelper;
     private TaskSQLDatabase taskSQLDatabase;
@@ -42,6 +50,60 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
         mainView = new MainView(this, getApplicationContext(), this);
         controller.AddView(mainView);
         controller.RefreshView();
+
+        CreateNotificationChannel();
+        CancelNotification();
+    }
+
+    @Override
+    protected void onStop() {
+        GenerateNotification();
+        super.onStop();
+    }
+
+    private void GenerateNotification(){
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        ArrayList<Task> allTask = taskSQLDatabase.GetAllObjects();
+        Calendar calendar = Calendar.getInstance();
+        Date now = calendar.getTime();
+
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date tomorrow = calendar.getTime();
+
+        for(Task task: allTask){
+            if((now.after(task.finishDate) || tomorrow.after(task.finishDate)) && task.status != Task.STATUS_DONE){
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+                builder.setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle(getString(R.string.notification_name))
+                        .setContentText(task.name)
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setWhen(calendar.getTimeInMillis())
+                        .setAutoCancel(true);
+                notificationManager.notify((int)task.GetID(), builder.build());
+            }
+        }
+    }
+
+    private void CancelNotification(){
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        ArrayList<Task> allTask = taskSQLDatabase.GetAllObjects();
+        for(Task task: allTask){
+            notificationManager.cancel((int)task.GetID());
+        }
+    }
+
+    private void CreateNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override

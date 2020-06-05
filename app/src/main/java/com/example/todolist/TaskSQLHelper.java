@@ -5,11 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 
 import com.example.todolist.sqldb.ISQLHelper;
-import com.example.todolist.sqldb.SQLDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
+
 
 public class TaskSQLHelper implements ISQLHelper<Task> {
 

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Task implements ISQLObject, IIDable, Serializable, IExportable {
+    public final static int STATUS_DONE =2;
+
+
     private long id;
     public String name, description;
     public int status, priority;
