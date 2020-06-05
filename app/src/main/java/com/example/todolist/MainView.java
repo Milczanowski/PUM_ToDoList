@@ -20,7 +20,7 @@ public class MainView implements IView<Task> {
     private Context context;
     private IMainViewActions mainViewActions;
     private LinearLayout tasksLayout;
-    private Button addTaskButton;
+    private Button addTaskButton, exportButton;
     private Spinner sortSpinner;
     private Activity activity;
 
@@ -35,6 +35,7 @@ public class MainView implements IView<Task> {
 
         tasksLayout = activity.findViewById(R.id.tasksLayout);
         addTaskButton = activity.findViewById(R.id.addTaskButton);
+        exportButton = activity.findViewById(R.id.exportButton);
         SetSortSpinner();
 
         addTaskButton.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +44,17 @@ public class MainView implements IView<Task> {
                 OnAddTaskButtonClick();
             }
         });
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnExportButtonClick();
+            }
+        });
+    }
+
+    private void OnExportButtonClick(){
+        mainViewActions.ExportTask();
     }
 
     private void OnAddTaskButtonClick(){

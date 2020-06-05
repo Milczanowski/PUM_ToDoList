@@ -6,18 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.core.content.FileProvider;
 
 public class CameraActivity extends BaseActivity implements ICamera, IPhotoView{
     private static final int REQUEST_IMAGE_CAPTURE = 3;
 
-    protected String photoPath;
+    private String photoPath;
+    private Uri photoURI;
     private IPhotoReceiver photoReceiver;
 
     @Override
@@ -41,28 +39,19 @@ public class CameraActivity extends BaseActivity implements ICamera, IPhotoView{
             File photoFile = null;
 
             try {
-                photoFile = CreateImageFile();
+                photoFile = File.createTempFile("image_", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+                photoPath = photoFile.getPath();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
 
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "com.example.android.fileprovider", photoFile);
+                photoURI = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + FILE_PROVIDER, photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 
             }else photoReceiver.ReceivePhoto(null);
         }else photoReceiver.ReceivePhoto(null);
-    }
-
-    private File CreateImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File image = File.createTempFile(imageFileName, ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
-
-        photoPath = image.getAbsolutePath();
-
-        return image;
     }
 
     @Override
@@ -72,7 +61,7 @@ public class CameraActivity extends BaseActivity implements ICamera, IPhotoView{
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             if(resultCode == RESULT_OK){
                 AddPicToGallery();
-                photoReceiver.ReceivePhoto(photoPath);
+                photoReceiver.ReceivePhoto(photoURI.getPath());
             }else{
                 photoReceiver.ReceivePhoto(null);
             }
@@ -94,8 +83,9 @@ public class CameraActivity extends BaseActivity implements ICamera, IPhotoView{
 
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(photoPath), "image/*");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri uri = Uri.parse(photoPath);
+        intent.setDataAndType(uri, "image/jpeg");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 }

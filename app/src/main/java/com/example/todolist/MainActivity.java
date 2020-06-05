@@ -1,10 +1,19 @@
 package com.example.todolist;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 
 import com.example.todolist.appcontroller.Controller;
 import com.example.todolist.sqldb.ISQLHelper;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import androidx.core.content.FileProvider;
 
 public class MainActivity extends BaseActivity implements IMainViewActions{
     private static final String DATABASE_NAME = "todolist.db";
@@ -153,5 +162,39 @@ public class MainActivity extends BaseActivity implements IMainViewActions{
             }break;
         }
         controller.SortView();
+    }
+
+    @Override
+    public void ExportTask() {
+        ArrayList<Task> allTask = taskSQLDatabase.GetAllObjects();
+
+        String export = "";
+
+        for(Task task: allTask){
+            export +=task.Export();
+            export += "\n";
+        }
+
+        File file  = null;
+
+        try {
+            file = File.createTempFile("export_", ".txt", getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS));
+
+            FileWriter writer = new FileWriter(file);
+            writer.append(export);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(file!=null){
+            Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + FILE_PROVIDER, file);
+
+              Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "text/plain");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(intent);
+        }
     }
 }
